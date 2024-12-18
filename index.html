@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPFT - View Fortnite Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://i.pinimg.com/736x/0d/26/31/0d2631a25ae30fe76d6bab9f61bf18b8.jpg" />
+    <script>
+        function viewProfile() {
+            const username = document.getElementById('username-input').value.trim();
+            if (username) {
+                const profileURL = `https://fortnitetracker.com/profile/all/${username}/events`;
+                window.open(profileURL, '_blank');
+            } else {
+                alert('Please enter a valid username.');
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        #main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Main Container -->
+    <div id="main-container">
+        <!-- Header -->
+        <h1 class="text-5xl font-bold mb-10 drop-shadow-lg">
+            Unprivate Fortnite Tracker Tool
+        </h1>
+
+        <!-- Input and Button -->
+        <div class="w-full max-w-lg flex items-center">
+            <input 
+                id="username-input" 
+                type="text" 
+                placeholder="Enter Fortnite username" 
+                class="flex-1 rounded-l-lg px-6 py-4 text-gray-800 text-lg"
+            />
+            <button 
+                onclick="viewProfile()" 
+                class="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-r-lg font-bold text-lg shadow-md">
+                View Profile
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-sm text-gray-300">
+        Raid 2024 &copy;
+    </footer>
+</body>
+</html>
