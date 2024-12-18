@@ -15,6 +15,6 @@ The **Unprivate Fortnite Tracker Tool (UPFT)** is a web tool designed to help Fo
    `https://fortnitetracker.com/profile/all/{username}/events`
 
 ## Installation
-1. Clone the repository or download the HTML file:
+1. 
    ```bash
-   git clone https://github.com/yourusername/UPFT.git
+   
