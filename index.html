@@ -6,70 +6,269 @@
     <title>UPFT - View Fortnite Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="https://i.pinimg.com/736x/0d/26/31/0d2631a25ae30fe76d6bab9f61bf18b8.jpg" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(-45deg, #0a0a23, #1a1a3a, #2d1b69, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                         0 0 40px rgba(59, 130, 246, 0.3),
+                         0 0 60px rgba(59, 130, 246, 0.1);
+        }
+        
+        .input-glow:focus {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4),
+                        0 0 40px rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .button-hover {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8, #6366f1);
+            background-size: 300% 300%;
+            animation: buttonGlow 3s ease infinite;
+            transition: all 0.3s ease;
+        }
+        
+        .button-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
+            animation-duration: 1s;
+        }
+        
+        @keyframes buttonGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .main-container {
+            animation: slideUp 1s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            animation: pulse 2s infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.05);
+                opacity: 0;
+            }
+        }
+        
+        .logo-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .logo-hover:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .main-title {
+                font-size: 2.5rem !important;
+                line-height: 1.2 !important;
+            }
+        }
+    </style>
     <script>
         function viewProfile() {
             const username = document.getElementById('username-input').value.trim();
             if (username) {
                 const profileURL = `https://fortnitetracker.com/profile/all/${username}/events`;
                 window.open(profileURL, '_blank');
+                
+                // Add success animation
+                const button = document.querySelector('.button-hover');
+                button.classList.add('animate-pulse');
+                setTimeout(() => button.classList.remove('animate-pulse'), 1000);
             } else {
-                alert('Please enter a valid username.');
+                // Modern alert with animation
+                showAlert('Please enter a valid username.');
             }
         }
+        
+        function showAlert(message) {
+            const alert = document.createElement('div');
+            alert.className = 'fixed top-4 right-4 glass text-white px-6 py-4 rounded-lg z-50 transform translate-x-full transition-transform duration-300';
+            alert.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <div class="w-5 h-5 border-2 border-red-400 rounded-full flex items-center justify-center">
+                        <div class="w-2 h-2 bg-red-400 rounded-full"></div>
+                    </div>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => alert.classList.remove('translate-x-full'), 100);
+            setTimeout(() => {
+                alert.classList.add('translate-x-full');
+                setTimeout(() => document.body.removeChild(alert), 300);
+            }, 3000);
+        }
+        
+        // Add floating particles
+        function createParticles() {
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = (Math.random() * 10 + 5) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                document.body.appendChild(particle);
+            }
+        }
+        
+        // Handle Enter key
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            document.getElementById('username-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    viewProfile();
+                }
+            });
+        });
     </script>
-    <style>
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden; /* Prevent scrolling */
-        }
-
-        #main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        footer {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-        }
-    </style>
 </head>
 <body class="text-white">
     <!-- Main Container -->
-    <div id="main-container">
+    <div class="main-container flex flex-col items-center text-center px-6">
         <!-- Header -->
-        <h1 class="text-5xl font-bold mb-10 drop-shadow-lg">
-            Unprivate Fortnite Tracker Tool
-        </h1>
-
-        <!-- Input and Button -->
-        <div class="w-full max-w-lg flex items-center">
-            <input 
-                id="username-input" 
-                type="text" 
-                placeholder="Enter Fortnite username" 
-                class="flex-1 rounded-l-lg px-6 py-4 text-gray-800 text-lg"
-            />
-            <button 
-                onclick="viewProfile()" 
-                class="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-r-lg font-bold text-lg shadow-md">
-                View Profile
-            </button>
+        <div class="mb-16 relative logo-hover">
+            <h1 class="main-title text-6xl md:text-7xl font-black mb-4 glow-text bg-gradient-to-r from-blue-400 via-purple-400 to-blue-600 bg-clip-text text-transparent">
+                UPFT
+            </h1>
+            <p class="text-xl md:text-2xl font-light text-gray-300 mb-2">
+                Unprivate Fortnite Tracker
+            </p>
+            <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
+        </div>
+        
+        <!-- Input Container -->
+        <div class="glass p-8 w-full max-w-md relative">
+            <div class="pulse-ring"></div>
+            <div class="relative z-10">
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-300 mb-3">
+                        Enter Player Username
+                    </label>
+                    <input 
+                        id="username-input" 
+                        type="text" 
+                        placeholder="Player username..." 
+                        class="input-glow w-full px-6 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 text-lg font-medium transition-all duration-300 focus:outline-none focus:border-blue-400 focus:bg-white/15"
+                        autocomplete="off"
+                    />
+                </div>
+                
+                <button 
+                    onclick="viewProfile()" 
+                    class="button-hover w-full py-4 rounded-xl font-bold text-lg text-white shadow-xl transform transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-400/50">
+                    <span class="flex items-center justify-center space-x-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <span>Track Profile</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Feature badges -->
+        <div class="flex flex-wrap gap-4 mt-12 justify-center">
+            <div class="glass px-4 py-2 rounded-full text-sm font-medium">
+                ⚡ Instant Results
+            </div>
+            <div class="glass px-4 py-2 rounded-full text-sm font-medium">
+                🏆 Tournament Stats
+            </div>
+            <div class="glass px-4 py-2 rounded-full text-sm font-medium">
+                📊 Detailed Analytics
+            </div>
         </div>
     </div>
-
+    
     <!-- Footer -->
-    <footer class="text-sm text-gray-300">
-        Raid 2024 &copy;
+    <footer class="absolute bottom-6 left-6 text-sm text-gray-400 font-light">
+        <div class="flex items-center space-x-2">
+            <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+            <span>Raid 2024 ©</span>
+        </div>
     </footer>
+    
+    <!-- Decorative elements -->
+    <div class="absolute top-10 right-10 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-xl"></div>
+    <div class="absolute bottom-20 left-20 w-24 h-24 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-xl"></div>
 </body>
 </html>
